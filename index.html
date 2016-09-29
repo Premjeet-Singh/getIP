@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html ng-app="geo">
+<title>System Info | get IP Address</title>
+<link rel="stylesheet" href="css/style.css">
+<body>
+	<h1>System Information</h1>
+	<div ng-controller="geoCtrl">
+		<p ng-bind="OSName"></p>
+		<p ng-bind="ip"></p>
+		<p ng-bind="hostname"></p>
+		<p ng-bind="loc"></p>
+		<p ng-bind="org"></p>
+		<p ng-bind="city"></p>
+		<p ng-bind="region"></p>
+		<p ng-bind="country"></p>
+		<p ng-bind="postal"></p>
+
+	</div>
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="http://code.angularjs.org/1.2.12/angular.min.js"></script>
+	<script src="http://code.angularjs.org/1.2.12/angular-route.min.js"></script>
+	<script>
+	'use strict';
+	var geo = angular.module('geo', [])
+	.controller('geoCtrl', ['$scope', '$http', function($scope, $http) {
+		$http.jsonp('http://ipinfo.io/?callback=JSON_CALLBACK')
+			.success(function(data) {
+			$scope.ip = 'IP: '+data.ip;
+			$scope.hostname = 'Host Name : '+data.hostname;
+			$scope.loc = 'Lat & Longitude : '+data.loc; //lat-longtitude
+			$scope.org = 'Organization : '+data.org; //organization
+			$scope.city = 'City : '+data.city;
+			$scope.region = 'State : '+data.region; //state
+			$scope.country = 'Country : '+data.country;
+			$scope.postal = 'Area Code : '+data.postal; //city area code
+
+			var OSName = "Unknown";
+			if (window.navigator.userAgent.indexOf("Windows NT 6.3") != -1) OSName="Windows 8.1";
+			if (window.navigator.userAgent.indexOf("Windows NT 6.2") != -1) OSName="Windows 8";
+			if (window.navigator.userAgent.indexOf("Windows NT 6.1") != -1) OSName="Windows 7";
+			if (window.navigator.userAgent.indexOf("Windows NT 6.0") != -1) OSName="Windows Vista";
+			if (window.navigator.userAgent.indexOf("Windows NT 5.1") != -1) OSName="Windows XP";
+			if (window.navigator.userAgent.indexOf("Windows NT 5.0") != -1) OSName="Windows 2000";
+			if (window.navigator.userAgent.indexOf("Mac")!=-1) OSName="Mac/iOS";
+			if (window.navigator.userAgent.indexOf("X11")!=-1) OSName="UNIX";
+			if (window.navigator.userAgent.indexOf("Linux")!=-1) OSName="Linux";
+			
+			$scope.OSName='Operating System :'+OSName;
+
+		});
+	}]);
+	</script>
+
+</body>
+</html>
